@@ -1,26 +1,27 @@
-import 'package:ecommerce_app/features/auth/presentation/screens/signup_screen.dart';
+import 'package:ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-
+class _SignupScreenState extends State<SignupScreen> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmpassController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
   bool isPassObscure = true;
-   
-
+  bool isConfirmPassObscure = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
   appBar: AppBar(
-    title: const  Text('Login'),
+    title: const  Text('SignUp'),
   ),
   body: SafeArea(
     child: Padding(
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 30),
         
             const Text(
-              'Welcome Back!',
+              'Welcome Here',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -42,10 +43,29 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 8),
         
             const Text(
-              'Login to continue shopping',
+              'Explore The Best',
             ),
-        
+
             const SizedBox(height: 40),
+
+             // Name field 
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: "Name",
+                hintText: 'Enter Your Name',
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if(value == null || value.isEmpty){
+                  return "Please Your Name";
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 20.0,),
         
             // Email field 
             TextFormField(
@@ -98,18 +118,36 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
 
-            //forget password
-              Align(
-                  alignment: Alignment.centerRight,
-                    child: TextButton(
-                        onPressed: () {
-                          
-                        },
-                      child: const Text('Forgot Password?'),
+            const SizedBox(height: 20.0,),
+
+            //confirm Password 
+            TextFormField(
+              controller: confirmpassController,
+              obscureText: isConfirmPassObscure,
+              decoration:  InputDecoration(
+                labelText: "Confirm Password",
+                hintText: 'Enter Confirm Password',
+                prefixIcon: Icon(Icons.lock_outlined),
+                suffixIcon: IconButton(
+                  onPressed: (){
+                    setState(() {
+                      isConfirmPassObscure = !isConfirmPassObscure;
+                    });
+                }, 
+                icon: isConfirmPassObscure? Icon(Icons.visibility_outlined): Icon(Icons.visibility_off_outlined)),
+                border: OutlineInputBorder(),
               ),
+              validator: (value) {
+                if(value !=passwordController.text ){
+                  return "Confirm password doesn't match";
+                }
+                
+                return null;
+              },
             ),
 
             const SizedBox(height: 20,),
+
             // Login button
            SizedBox(
             width: double.infinity,
@@ -118,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 formKey.currentState!.validate();
               },
-              child: const Text('Login'),
+              child: const Text('Sign Up'),
             ),
           ),
 
@@ -152,12 +190,12 @@ class _LoginScreenState extends State<LoginScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Don't have an account?"),
+              const Text("Already have an account?"),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
                 },
-                child: const Text('Sign Up'),
+                child: const Text('Login'),
               ),
             ],
           ),
