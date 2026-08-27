@@ -59,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               validator: (value) {
                 if(value == null || value.isEmpty){
-                  return "Please Your Name";
+                  return "Please Enter Your Name";
                 }
                 return null;
               },
@@ -138,13 +138,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
-                if(value !=passwordController.text ){
-                  return "Confirm password doesn't match";
+                  if (value == null || value.isEmpty) {
+                    return "Please confirm your password";
+                  }
+
+                  if (value != passwordController.text) {
+                 return "Confirm password doesn't match";
                 }
-                
-                return null;
-              },
-            ),
+                 return null;
+                },
+                              ),
 
             const SizedBox(height: 20,),
 
@@ -193,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Text("Already have an account?"),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+                  Navigator.pop(context);
                 },
                 child: const Text('Login'),
               ),
