@@ -17,9 +17,19 @@ class AuthBloc extends Bloc<AuthBlocEvent,AuthBlocState> {
         emit(AuthErrorState(errorMsg: e.toString()));
       }
     },);
+
+
+    on<AuthLoginEvent>((event, emit) async {
+      emit(AuthLoadingState());
+      try{
+      final user = await  repo.login(email: event.email, password: event.password);
+      emit(AuthSuccessState(user: user));
+
+      }catch(e){
+        emit(AuthErrorState(errorMsg: e.toString()));
+      }
+    },);
   }
-
-
 
   
 }

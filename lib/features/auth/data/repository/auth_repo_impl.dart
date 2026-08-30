@@ -26,15 +26,13 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<UserEntity> login({required String email, required String password}) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<UserEntity> login({required String email, required String password}) async {
+    return await  remote.login(email: email, password: password);
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+   await remote.logout();
   }
 
   @override

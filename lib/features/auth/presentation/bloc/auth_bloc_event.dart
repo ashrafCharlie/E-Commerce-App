@@ -19,3 +19,15 @@ class AuthSignUpEvent extends AuthBlocEvent{
   @override
   List<Object?> get props => [name,email,password];
 }
+
+class AuthLoginEvent extends AuthBlocEvent{
+  final String email;
+  final String password;
+  AuthLoginEvent({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [email,password];
+}
