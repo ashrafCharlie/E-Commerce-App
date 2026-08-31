@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/features/auth/data/datasource/remote/auth_remote_datasource.dart';
 import 'package:ecommerce_app/features/auth/data/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRemoteDatasourceImpl  implements AuthRemoteDatasource{
+ static bool _isGoogleInitialized = false;
  final FirebaseAuth _auth = FirebaseAuth.instance;
  final FirebaseFirestore _firestore =  FirebaseFirestore.instance;
+
   @override
   Future<void> deleteAccount() async {
     try{
@@ -70,11 +74,55 @@ class AuthRemoteDatasourceImpl  implements AuthRemoteDatasource{
     }
   }
 
-  @override
-  Future<UserModel> signInWithGoogle() {
-    // TODO: implement signInWithGoogle
-    throw UnimplementedError();
+ //initialize the google signin
+  Future<void> _initGoogleSignIn() async {
+    if (!_isGoogleInitialized) {
+      await GoogleSignIn.instance.initialize();
+      _isGoogleInitialized = true;
+    }
   }
+
+  @override
+  Future<UserModel?> signInwithGoogle() async {
+    UserCredential userCredential;
+    try {
+      if (kIsWeb) {
+        final googleProvider = GoogleAuthProvider();
+        userCredential = await _auth.signInWithPopup(googleProvider);
+      } else {
+        await _initGoogleSignIn();
+        final GoogleSignInAccount? user = await GoogleSignIn.instance.authenticate();
+
+        if (user == null) {
+          throw Exception("Google Sign-In cancelled by user.");
+        }
+
+        final googleAuth = user.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+        );
+        userCredential = await _auth.signInWithCredential(credential);
+      }
+      final user = userCredential.user;
+      if (user == null) {
+        return null;
+      }
+      final model = UserModel(
+        uid: user.uid,
+        email: user.email?? '',
+        name: user.displayName ?? '',
+        createdAt: DateTime.now(),
+      );
+
+      //save user information to firebase
+      await _firestore.collection('users').doc(user.uid).set(model.toMap());
+      return model;
+    } catch (e) {
+      throw Exception("Google sign-in failed: $e");
+    }
+  }
+
 
   @override
   Future<UserModel> signUp({required String name, required String email, required String password}) async{
@@ -90,7 +138,7 @@ class AuthRemoteDatasourceImpl  implements AuthRemoteDatasource{
     'email': email,
     'createdAt': FieldValue.serverTimestamp(),
    });
-   return  UserModel(uid:user.uid, name: name, email: email);
+   return  UserModel(uid:user.uid, name: name, email: email, );
    }catch(e){
     throw Exception("Sign up failed, Error is : $e");
    }

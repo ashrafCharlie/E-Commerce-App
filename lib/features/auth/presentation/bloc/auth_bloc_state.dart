@@ -11,18 +11,22 @@ class AuthInitState extends AuthBlocState{}
 
 class AuthLoadingState extends AuthBlocState{}
 
-class AuthSuccessState extends AuthBlocState{
-  final UserEntity user;
-  AuthSuccessState({required this.user});
-  @override
-  List<Object?> get props => [user];
-}
-
-class AuthUnSuccesfulState extends AuthBlocState{}
-
 class AuthErrorState extends AuthBlocState{
   final String errorMsg;
   AuthErrorState({required this.errorMsg});
   @override
   List<Object?> get props => [errorMsg];
 }
+class AuthcheckingState extends AuthBlocState{
+}
+class AuthenticateState extends AuthBlocState{
+  final UserEntity user;
+  AuthenticateState({
+    required this.user,
+  });
+  @override
+  List<Object?> get props => [user];
+}
+
+class UnAuthenticateState extends AuthBlocState{}
+class ResetEmailSendedState extends AuthBlocState{}

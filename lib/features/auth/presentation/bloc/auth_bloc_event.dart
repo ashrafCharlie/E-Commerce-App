@@ -31,3 +31,17 @@ class AuthLoginEvent extends AuthBlocEvent{
   @override
   List<Object?> get props => [email,password];
 }
+
+class AuthCheckEvent extends AuthBlocEvent{}
+
+class LogoutEvent extends AuthBlocEvent{}
+
+
+class ForgetPasswordEvent extends AuthBlocEvent{
+  final String email;
+  ForgetPasswordEvent({required this.email});
+  @override
+  List<Object?> get props => [email];
+}
+
+class GoogleSignInEvent extends AuthBlocEvent{}

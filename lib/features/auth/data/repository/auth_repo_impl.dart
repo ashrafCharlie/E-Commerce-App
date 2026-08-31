@@ -14,20 +14,18 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<void> forgotPassword({required String email}) {
-    // TODO: implement forgotPassword
-    throw UnimplementedError();
+  Future<void> forgotPassword({required String email}) async {
+  await  remote.forgotPassword(email: email);
   }
 
   @override
-  Future<UserEntity?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<UserEntity?> getCurrentUser()async {
+  return await remote.getCurrentUser();
   }
 
   @override
   Future<UserEntity> login({required String email, required String password}) async {
-    return await  remote.login(email: email, password: password);
+    return await remote.login(email: email, password: password);
   }
 
   @override
@@ -36,9 +34,8 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<UserEntity> signInWithGoogle() {
-    // TODO: implement signInWithGoogle
-    throw UnimplementedError();
+  Future<UserEntity?> signInWithGoogle() async {
+   return await remote.signInwithGoogle();
   }
 
   @override
