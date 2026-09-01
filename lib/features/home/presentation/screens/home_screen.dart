@@ -58,6 +58,39 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: 30),
+
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(children: [
+                Text("Special offer 🔥",
+                style: textTheme.titleLarge?.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
+                ),
+
+                const SizedBox(height: 8,),
+
+                Text(
+                  "Get up to 50% off",
+                  style: textTheme.headlineLarge?.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
+                ),
+
+                const SizedBox(height: 16,),
+
+                ElevatedButton(
+                  onPressed: (){}, 
+                  child: const Text("Shop Now")),
+
+              ],),
+            )
+
           ],
         ),
       ),
