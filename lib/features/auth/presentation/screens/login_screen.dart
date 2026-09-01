@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/core/validators/app_validator.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
@@ -32,9 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-  appBar: AppBar(
-    title: const  Text('Login'),
-  ),
   body: BlocListener<AuthBloc,AuthBlocState>(
     listener: (context, state) {
       if(state is ResetEmailSendedState){
@@ -51,18 +49,17 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const SizedBox(height: 30),
             
-                const Text(
+                 Text(
                   'Welcome Back!',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge,
+                  
                 ),
             
                 const SizedBox(height: 8),
             
-                const Text(
+                 Text(
                   'Login to continue shopping',
+                  style:Theme.of(context).textTheme.bodyLarge,
                 ),
             
                 const SizedBox(height: 40),
@@ -75,17 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelText: "Email",
                     hintText: 'Enter Your Email',
                     prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(),
+                    
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Please Enter an Email";
-                    }
-                    if(!value.contains('@')){
-                      return "Please Enter a valid Email";
-                    }
-                    return null;
-                  },
+                  validator: AppValidator.email,
                 ),
       
                  const  SizedBox(height: 20,),
@@ -105,17 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                     }, 
                     icon: isPassObscure? Icon(Icons.visibility_outlined): Icon(Icons.visibility_off_outlined)),
-                    border: OutlineInputBorder(),
+
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Please Enter Your Pasword";
-                    }
-                    if(value.length < 6){
-                      return "Password must be at least 6 characters!";
-                    }
-                    return null;
-                  },
+                  validator: AppValidator.password,
                 ),
       
                 //forget password
@@ -140,19 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         labelText: "Email",
                                         hintText: "Enter your email",
                                         prefixIcon: Icon(Icons.email_outlined),
-                                        border: OutlineInputBorder(),
+                               
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.trim().isEmpty) {
-                                          return "Please enter your email";
-                                        }
-      
-                                        if (!value.contains('@')) {
-                                          return "Please enter a valid email";
-                                        }
-      
-                                        return null;
-                                      },
+                                      validator: AppValidator.email,
                                     ),
                                   ),
       
@@ -189,29 +160,25 @@ class _LoginScreenState extends State<LoginScreen> {
       
                 const SizedBox(height: 20,),
                 // Login button
-               SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                   if( formKey.currentState!.validate()){
-                    final email = emailController.text.trim();
-                    final password = passwordController.text;
-                    context.read<AuthBloc>().add(AuthLoginEvent(email: email, password: password));
-                   }
-                  },
-                  child: BlocBuilder<AuthBloc,AuthBlocState>(
-                     builder:(context, state) {
-                       if(state is AuthLoadingState){
-                        return CircularProgressIndicator();
-                       }
-                      return Text("Login");
-                     } ,
-      
-      
-                    ),
-                ),
-              ),
+               ElevatedButton(
+                 onPressed: () {
+                  if( formKey.currentState!.validate()){
+                   final email = emailController.text.trim();
+                   final password = passwordController.text;
+                   context.read<AuthBloc>().add(AuthLoginEvent(email: email, password: password));
+                  }
+                 },
+                 child: BlocBuilder<AuthBloc,AuthBlocState>(
+                    builder:(context, state) {
+                      if(state is AuthLoadingState){
+                       return CircularProgressIndicator();
+                      }
+                     return Text("Login");
+                    } ,
+                     
+                     
+                   ),
+               ),
       
               const SizedBox(height: 20),
       

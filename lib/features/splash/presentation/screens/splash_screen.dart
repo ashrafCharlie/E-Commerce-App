@@ -18,17 +18,14 @@ class SplashScreen extends StatelessWidget {
         
               const SizedBox(height: 20),
         
-              const Text(
+               Text(
                 'Ash Shopping Platform',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
         
               const SizedBox(height: 10),
         
-              const Text('Your shopping starts here'),
+               Text('Your shopping starts here',style: Theme.of(context).textTheme.bodyLarge,),
         
               const SizedBox(height: 30),
         

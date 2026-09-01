@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/core/theme/app_theme.dart';
 import 'package:ecommerce_app/features/auth/data/datasource/remote/auth_remote_datasource_impl.dart';
 import 'package:ecommerce_app/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:ecommerce_app/features/auth/domain/repositories/auth_repo.dart';
@@ -33,6 +34,9 @@ class EcommercApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
         home: BlocConsumer<AuthBloc, AuthBlocState>(
   listener: (context, state) {
    if(state is AuthErrorState){

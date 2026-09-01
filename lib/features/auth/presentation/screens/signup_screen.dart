@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/core/validators/app_validator.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
@@ -34,9 +35,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
-  appBar: AppBar(
-    title: const  Text('SignUp'),
-  ),
   body: BlocListener<AuthBloc,AuthBlocState>(
     listener: (context, state) {
       if(state is AuthErrorState){
@@ -53,18 +51,16 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 const SizedBox(height: 30),
             
-                const Text(
+                 Text(
                   'Welcome Here',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
             
                 const SizedBox(height: 8),
             
-                const Text(
+                 Text(
                   'Explore The Best',
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 
                 const SizedBox(height: 40),
@@ -76,14 +72,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     labelText: "Name",
                     hintText: 'Enter Your Name',
                     prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(),
+                 
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Please Enter Your Name";
-                    }
-                    return null;
-                  },
+                  validator: AppValidator.name,
                 ),
                 
                 const SizedBox(height: 20.0,),
@@ -96,17 +87,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     labelText: "Email",
                     hintText: 'Enter Your Email',
                     prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(),
+                  
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Please Enter an Email";
-                    }
-                    if(!value.contains('@')){
-                      return "Please Enter a valid Email";
-                    }
-                    return null;
-                  },
+                  validator: AppValidator.email,
                 ),
                 
                  const  SizedBox(height: 20,),
@@ -126,17 +109,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         });
                     }, 
                     icon: isPassObscure? Icon(Icons.visibility_outlined): Icon(Icons.visibility_off_outlined)),
-                    border: OutlineInputBorder(),
+          
                   ),
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                      return "Please Enter Your Pasword";
-                    }
-                    if(value.length < 6){
-                      return "Password must be at least 6 characters!";
-                    }
-                    return null;
-                  },
+                  validator: AppValidator.password,
                 ),
                 
                 const SizedBox(height: 20.0,),
@@ -156,43 +131,32 @@ class _SignupScreenState extends State<SignupScreen> {
                         });
                     }, 
                     icon: isConfirmPassObscure? Icon(Icons.visibility_outlined): Icon(Icons.visibility_off_outlined)),
-                    border: OutlineInputBorder(),
+                   
                   ),
-                  validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please confirm your password";
-                      }
-                
-                      if (value != passwordController.text) {
-                     return "Confirm password doesn't match";
-                    }
-                     return null;
-                    },
+                  validator: (value){
+                    return AppValidator.confrimPassword(value, confirmpassController.text );
+                  }
                     ),
                 
                 const SizedBox(height: 20,),
                 
                 // Login button
-               SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if(formKey.currentState!.validate()){
-                    final email = emailController.text.trim();
-                    final name = nameController.text.trim();
-                    final password = passwordController.text;
-                  
-                    context.read<AuthBloc>().add(AuthSignUpEvent(
-                      email: email,
-                       name: name,
-                        password: password));
-                    }
-                  
-                  },
-                  child: const Text('Sign Up'),
-                ),
-              ),
+               ElevatedButton(
+                 onPressed: () {
+                   if(formKey.currentState!.validate()){
+                   final email = emailController.text.trim();
+                   final name = nameController.text.trim();
+                   final password = passwordController.text;
+                 
+                   context.read<AuthBloc>().add(AuthSignUpEvent(
+                     email: email,
+                      name: name,
+                       password: password));
+                   }
+                 
+                 },
+                 child: const Text('Sign Up'),
+               ),
                 
               const SizedBox(height: 20),
                 
