@@ -50,7 +50,7 @@ class EcommercApp extends StatelessWidget {
 
     if (state is AuthenticateState) {
     
-      return const HomeScreen();
+      return  HomeScreen(currentUser: state.user,);
     }
     if(state is AuthLoadingState){
       return Scaffold(

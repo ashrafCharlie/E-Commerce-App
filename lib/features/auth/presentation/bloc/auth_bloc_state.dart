@@ -20,7 +20,7 @@ class AuthErrorState extends AuthBlocState{
 class AuthcheckingState extends AuthBlocState{
 }
 class AuthenticateState extends AuthBlocState{
-  final UserEntity user;
+  final UserEntity? user;
   AuthenticateState({
     required this.user,
   });

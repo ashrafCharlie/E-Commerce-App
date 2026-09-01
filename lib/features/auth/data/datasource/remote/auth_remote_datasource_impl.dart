@@ -34,26 +34,34 @@ class AuthRemoteDatasourceImpl  implements AuthRemoteDatasource{
     }
   }
 
+  //get Current user
   @override
   Future<UserModel?> getCurrentUser() async {
-   final currentUser =  _auth.currentUser;
-   if(currentUser == null){
-    return null;
-   }
-   return UserModel(uid: currentUser.uid, name: currentUser.displayName?? '', email: currentUser.email ?? '');
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return null;
+      }
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      if (!doc.exists) return null;
+      return UserModel.fromMap(doc.data()!);
+    } catch (e) {
+      throw Exception("Some error Occured: $e");
+    }
   }
 
   @override
-  Future<UserModel> login({required String email, required String password}) async{
+  Future<UserModel?> login({required String email, required String password}) async{
     try{
     final UserCredential userCredential =  await _auth.signInWithEmailAndPassword(email: email, password: password);
     final user = userCredential.user;
     if(user == null){
-      throw Exception("user not found");
+      return null;
     }
 
-    return UserModel(uid: user.uid, name: user.displayName ?? '', email: email);
-
+    final doc = await _firestore.collection('users').doc(user.uid).get();
+    if(!doc.exists) return null;
+    return UserModel.fromMap(doc.data()!);
     }catch(e){
       throw Exception("Login Failed.. Error is: $e");
     }
@@ -123,27 +131,33 @@ class AuthRemoteDatasourceImpl  implements AuthRemoteDatasource{
     }
   }
 
+ @override
+  Future<UserModel?> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final user = userCredential.user!;
+      final model = UserModel(
+        uid: user.uid,
+        email: email,
+        name: name,
+        createdAt: DateTime.now(),
+      );
 
-  @override
-  Future<UserModel> signUp({required String name, required String email, required String password}) async{
-   try{
-  final UserCredential userCredential =  await  _auth.createUserWithEmailAndPassword(email: email, password: password);
-  final user = userCredential.user;
-  if(user == null){
-    throw Exception("User not found..");
+      //save user information to firebase
+      await _firestore.collection('users').doc(user.uid).set(model.toMap());
+
+      return model;
+    } catch (e) {
+      throw Exception("Account Creation Failed: $e");
+    }
   }
-
-   await _firestore.collection('users').doc(user.uid).set({
-    'name': name,
-    'email': email,
-    'createdAt': FieldValue.serverTimestamp(),
-   });
-   return  UserModel(uid:user.uid, name: name, email: email, );
-   }catch(e){
-    throw Exception("Sign up failed, Error is : $e");
-   }
-  }
-
   @override
   Future<void> updatePassword({required String currentPassword, required String newPassword}) {
     // TODO: implement updatePassword

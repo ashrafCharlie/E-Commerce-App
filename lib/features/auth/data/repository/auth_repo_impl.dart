@@ -24,7 +24,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<UserEntity> login({required String email, required String password}) async {
+  Future<UserEntity?> login({required String email, required String password}) async {
     return await remote.login(email: email, password: password);
   }
 
@@ -39,7 +39,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<UserEntity> signUp({required String name, required String email, required String password}) async {
+  Future<UserEntity?> signUp({required String name, required String email, required String password}) async {
    return await remote.signUp(name: name, email: email, password: password);
   }
 

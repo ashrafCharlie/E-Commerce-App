@@ -1,29 +1,64 @@
-import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
+import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final UserEntity? currentUser;
+  const HomeScreen({super.key,required this.currentUser});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
- 
-
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+   
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Screen"),
-        centerTitle: true,
+        title: Text(
+          widget.currentUser == null ? "Hello":"Hello, ${ widget.currentUser!.name}",
+          style: textTheme.titleLarge,
+        ),
         actions: [
-          IconButton(onPressed: (){
-            context.read<AuthBloc>().add(LogoutEvent());
-          }, icon: Icon(Icons.logout))
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_outlined),
+            color: colorScheme.onSurface,
+          ),
+
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.shopping_cart_outlined),
+            color: colorScheme.onSurface,
+          ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          "Welcome to Home Screen",
-          style: TextStyle(fontSize: 24),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Text(
+              "Find Your Favorite Products",
+              style: textTheme.headlineLarge,
+            ),
+
+            const SizedBox(height: 16),
+
+            TextField(
+              decoration: InputDecoration(
+                hintText: "Search products...",
+                prefixIcon: const Icon(Icons.search),
+               
+              ),
+            ),
+
+            const SizedBox(height: 30),
+          ],
         ),
       ),
     );

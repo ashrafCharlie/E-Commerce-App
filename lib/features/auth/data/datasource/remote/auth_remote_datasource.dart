@@ -2,7 +2,7 @@ import 'package:ecommerce_app/features/auth/data/model/user_model.dart';
 
 abstract class AuthRemoteDatasource {
   Future<UserModel?> getCurrentUser();
-  Future<UserModel> signUp(
+  Future<UserModel?> signUp(
     {
       required String name,
       required String email,
@@ -10,7 +10,7 @@ abstract class AuthRemoteDatasource {
     }
   );
 
-  Future<UserModel> login({
+  Future<UserModel?> login({
     required String email,
     required String password,
   });
