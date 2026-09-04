@@ -1,0 +1,279 @@
+import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+  final UserEntity? currentUser;
+  const HomePage({super.key, required this.currentUser});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+   final List<Map<String, dynamic>> categories = [
+  {
+    'name': 'Fashion',
+    'icon': Icons.checkroom_outlined,
+  },
+  {
+    'name': 'Electronics',
+    'icon': Icons.phone_android_outlined,
+  },
+  {
+    'name': 'Shoes',
+    'icon': Icons.directions_run_outlined,
+  },
+  {
+    'name': 'Computers',
+    'icon': Icons.computer_outlined,
+  },
+];
+
+
+final List<Map<String, dynamic>> products = [
+  {
+    'name': 'Wireless Headphone',
+    'price': 2500,
+    'icon': Icons.headphones_outlined,
+  },
+  {
+    'name': 'Smart Watch',
+    'price': 3500,
+    'icon': Icons.watch_outlined,
+  },
+  {
+    'name': 'Running Shoes',
+    'price': 2200,
+    'icon': Icons.directions_run_outlined,
+  },
+  {
+    'name': 'Laptop',
+    'price': 65000,
+    'icon': Icons.laptop_outlined,
+  },
+];
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+   
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.currentUser == null ? "Hello":"Hello, ${ widget.currentUser!.name}",
+          style: textTheme.titleLarge,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_outlined),
+            color: colorScheme.onSurface,
+          ),
+
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.shopping_cart_outlined),
+            color: colorScheme.onSurface,
+          ),
+        ],
+      ),
+
+      body: SingleChildScrollView(
+        physics:const ClampingScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Text(
+              "Find Your Favorite Products",
+              style: textTheme.headlineLarge,
+            ),
+
+            const SizedBox(height: 16),
+
+            TextField(
+              decoration: InputDecoration(
+                hintText: "Search products...",
+                prefixIcon: const Icon(Icons.search),
+               
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(children: [
+                Text("Special offer 🔥",
+                style: textTheme.titleLarge?.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
+                ),
+
+                const SizedBox(height: 8,),
+
+                Text(
+                  "Get up to 50% off",
+                  style: textTheme.headlineLarge?.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
+                ),
+
+                const SizedBox(height: 16,),
+
+                ElevatedButton(
+                  onPressed: (){}, 
+                  child: const Text("Shop Now")),
+
+              ],),
+            ),
+
+            const SizedBox(height: 30),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Categories",
+                    style: textTheme.titleLarge,
+                  ),
+
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text("See All"),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12,),
+
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder:(context, index) {
+                    final catagory = categories[index];
+
+                    return Container(
+                      width: 90,
+                      margin: const EdgeInsets.only(right: 12),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: colorScheme.primaryContainer,
+                            child: Icon(catagory['icon'],
+                            color: colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+
+                          const SizedBox(height: 8,),
+
+                          Text(
+                            catagory['name'],
+                            style: textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          
+                        ],
+                      ),
+                    );
+                  },
+                   ),
+              ),
+        const SizedBox(height: 30),
+
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text(
+      "Popular Products",
+      style: textTheme.titleLarge,
+    ),
+
+    TextButton(
+      onPressed: () {},
+      child: const Text("See All"),
+    ),
+  ],
+),
+
+const SizedBox(height: 12),
+
+GridView.builder(
+  shrinkWrap: true,
+  physics: const NeverScrollableScrollPhysics(),
+  itemCount: products.length,
+  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+    crossAxisSpacing: 12,
+    mainAxisSpacing: 12,
+    childAspectRatio: 0.75,
+  ),
+  itemBuilder: (context, index) {
+    final product = products[index];
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Center(
+                child: Icon(
+                  product['icon'],
+                  size: 70,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+
+            Text(
+              product['name'],
+              style: textTheme.titleLarge,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              "৳${product['price']}",
+              style: textTheme.bodyLarge?.copyWith(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text("Add to Cart"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+),
+          ],  
+        ),
+        
+      ),
+    );
+  }
+}

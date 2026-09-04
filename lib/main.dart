@@ -33,6 +33,9 @@ class EcommercApp extends StatelessWidget {
           BlocProvider(create: (context) => AuthBloc(repo: context.read<AuthRepo>())..add(AuthCheckEvent()),)
         ],
         child: MaterialApp(
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              overscroll: false,
+            ),
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
