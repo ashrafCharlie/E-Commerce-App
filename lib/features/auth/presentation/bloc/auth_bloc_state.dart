@@ -17,8 +17,8 @@ class AuthErrorState extends AuthBlocState{
   @override
   List<Object?> get props => [errorMsg];
 }
-class AuthcheckingState extends AuthBlocState{
-}
+class AuthcheckingState extends AuthBlocState{}
+
 class AuthenticateState extends AuthBlocState{
   final UserEntity? user;
   AuthenticateState({

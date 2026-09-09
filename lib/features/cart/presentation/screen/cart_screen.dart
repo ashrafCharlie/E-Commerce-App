@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/checkout/presentation/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_bloc.dart';
@@ -139,6 +140,16 @@ class _CartScreenState extends State<CartScreen> {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: SizedBox(
+                    height: 60,
+                    width: double.infinity,
+                    child: ElevatedButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutScreen(cartItems:state.cartItems,totalPrice: totalPrice,),));
+                    }, child: Text("Checkout",)),
+                  ),
+                )
               ],
             );
           }

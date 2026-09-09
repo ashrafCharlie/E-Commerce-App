@@ -1,5 +1,9 @@
 import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
+import 'package:ecommerce_app/features/product/presentation/bloc/product_bloc.dart';
+import 'package:ecommerce_app/features/product/presentation/bloc/product_state.dart';
+import 'package:ecommerce_app/features/product/presentation/screen/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final UserEntity? currentUser;
@@ -30,29 +34,6 @@ class _HomePageState extends State<HomePage> {
   },
 ];
 
-
-final List<Map<String, dynamic>> products = [
-  {
-    'name': 'Wireless Headphone',
-    'price': 2500,
-    'icon': Icons.headphones_outlined,
-  },
-  {
-    'name': 'Smart Watch',
-    'price': 3500,
-    'icon': Icons.watch_outlined,
-  },
-  {
-    'name': 'Running Shoes',
-    'price': 2200,
-    'icon': Icons.directions_run_outlined,
-  },
-  {
-    'name': 'Laptop',
-    'price': 65000,
-    'icon': Icons.laptop_outlined,
-  },
-];
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +93,7 @@ final List<Map<String, dynamic>> products = [
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(children: [
-                Text("Special offer 🔥",
+                Text("Special offer",
                 style: textTheme.titleLarge?.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -192,88 +173,96 @@ final List<Map<String, dynamic>> products = [
               ),
         const SizedBox(height: 30),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Text(
-      "Popular Products",
-      style: textTheme.titleLarge,
-    ),
 
-    TextButton(
-      onPressed: () {},
-      child: const Text("See All"),
-    ),
-  ],
-),
 
-const SizedBox(height: 12),
+        const SizedBox(height: 12),
 
-GridView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemCount: products.length,
-  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    crossAxisSpacing: 12,
-    mainAxisSpacing: 12,
-    childAspectRatio: 0.75,
-  ),
-  itemBuilder: (context, index) {
-    final product = products[index];
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Center(
-                child: Icon(
-                  product['icon'],
-                  size: 70,
-                  color: colorScheme.primary,
+        BlocBuilder<ProductBloc,ProductState>(
+          builder: (context, state) {
+            if(state is ProductLoadingState){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            if(state is ProductErrorState){
+              return Center(child: Text(state.errorMessage),);
+            }
+            if(state is ProductLoadedState){ 
+              final productList = state.productList;
+              if(productList.isEmpty){
+                return Center(child: Text("No product found"),);
+              }
+            return  GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount:productList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.75,
+            ),
+            itemBuilder: (context, index) {
+              final product = productList[index];
+          
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                     MaterialPageRoute(
+                      builder: (context) => ProductDetailsScreen(product: product),));
+                },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Image.network(product.productImage)
+                          ),
+                        ),
+                          
+                        Text(
+                          product.productTitle,
+                          style: textTheme.titleMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                          
+                        const SizedBox(height: 6),
+                          
+                        Text(
+                          "\$${product.productPrice}",
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                          
+                        const SizedBox(height: 8),
+                          
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Add to Cart"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-
-            Text(
-              product['name'],
-              style: textTheme.titleLarge,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            const SizedBox(height: 6),
-
-            Text(
-              "৳${product['price']}",
-              style: textTheme.bodyLarge?.copyWith(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text("Add to Cart"),
-              ),
-            ),
-          ],
+              );
+            },
+          );
+            }
+          return Center(child: Text("Some error occured"),);
+          },
         ),
-      ),
-    );
-  },
-),
-          ],  
-        ),
-        
-      ),
-    );
-  }
-}
+                  ],  
+                ),
+                
+              ),
+            );
+          }
+        }

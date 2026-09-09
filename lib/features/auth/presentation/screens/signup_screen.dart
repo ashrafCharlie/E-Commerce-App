@@ -19,7 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
   final confirmpassController = TextEditingController();
 
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool isPassObscure = true;
   bool isConfirmPassObscure = true;
 
@@ -45,7 +45,7 @@ class _SignupScreenState extends State<SignupScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -134,7 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                    
                   ),
                   validator: (value){
-                    return AppValidator.confrimPassword(value, confirmpassController.text );
+                    return AppValidator.confirmPassword(value, confirmpassController.text );
                   }
                     ),
                 
@@ -143,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Login button
                ElevatedButton(
                  onPressed: () {
-                   if(formKey.currentState!.validate()){
+                   if(_formKey.currentState!.validate()){
                    final email = emailController.text.trim();
                    final name = nameController.text.trim();
                    final password = passwordController.text;
