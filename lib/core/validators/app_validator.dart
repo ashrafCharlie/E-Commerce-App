@@ -31,7 +31,7 @@ class AppValidator {
  }
 
 
- static String? confrimPassword(String? value, String? confirmPassword){
+ static String? confirmPassword(String? value, String? confirmPassword){
   if (value == null || value.isEmpty) {
     return "Please confirm your password";
   }
@@ -41,4 +41,30 @@ class AppValidator {
   }
   return null;
  }
+
+ static String? phone(String? value){
+    if(value == null || value.trim().isEmpty){
+      return "Please enter your number";
+    }
+    if(value.length < 11){
+      return"Please enter a valid number";
+    }
+    return null;
+ }
+
+ static String? address(String? value){
+    if(value == null || value.trim().isEmpty){
+      return "Please enter your address";
+    }
+    return null;
+ }
+
+ static String? city(String? value){
+    if(value == null || value.trim().isEmpty){
+      return "Please enter your city/area";
+    }
+    return null;
+ }
+
+
 }
