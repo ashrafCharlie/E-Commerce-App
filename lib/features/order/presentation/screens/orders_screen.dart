@@ -3,6 +3,7 @@ import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.da
 import 'package:ecommerce_app/features/order/presentation/bloc/order_bloc.dart';
 import 'package:ecommerce_app/features/order/presentation/bloc/order_event.dart';
 import 'package:ecommerce_app/features/order/presentation/bloc/order_state.dart';
+import 'package:ecommerce_app/features/order/presentation/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +54,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           vertical: 8,
                         ),
                         child: ListTile(
-
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => OrderDetailsScreen(order: order),));
+                          },
                           title: Text(
                             'Order #${order.orderId}',
                           ),
@@ -67,7 +71,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   },
               );
             }
-            return Center(child: Text("Some error occured"),);
+            return Center(child: Text("Some error occurred"),);
           },
       ),
     );

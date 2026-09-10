@@ -16,3 +16,12 @@ class CartLoadedState extends CartState{
   @override
   List<Object?> get props => [cartItems];
 }
+
+class CartErrorState extends CartState{
+  final String message;
+  CartErrorState({required this.message});
+  @override
+  List<Object?> get props => [message];
+}
+
+class CartAddSuccessfulState extends CartState{}

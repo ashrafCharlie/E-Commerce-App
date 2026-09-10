@@ -1,3 +1,6 @@
+import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
+import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
 import 'package:ecommerce_app/features/checkout/presentation/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +9,8 @@ import 'package:ecommerce_app/features/cart/presentation/bloc/cart_event.dart';
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_state.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+  final UserEntity? currentUser;
+  const CartScreen({super.key,required this.currentUser});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -16,10 +20,13 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    final authState = context.read<AuthBloc>().state;
+    if(authState is AuthenticateState){
+      context.read<CartBloc>().add(
+        GetCartItemsEvent(userId: authState.user!.uid ),
+      );
+    }
 
-    context.read<CartBloc>().add(
-      GetCartItemsEvent(),
-    );
   }
 
   @override
@@ -83,7 +90,8 @@ class _CartScreenState extends State<CartScreen> {
                                 IconButton(
                                   onPressed: () {
                                     context.read<CartBloc>().add(
-                                      UpdateQuantityEvent(
+                                      UpdateCartEvent(
+                                        userId: widget.currentUser!.uid,
                                         productId: cartItem.product.productId,
                                         quantity: cartItem.quantity - 1,
                                       ),
@@ -102,7 +110,8 @@ class _CartScreenState extends State<CartScreen> {
                               IconButton(
                                 onPressed: () {
                                   context.read<CartBloc>().add(
-                                    UpdateQuantityEvent(
+                                    UpdateCartEvent(
+                                      userId: widget.currentUser!.uid,
                                       productId: cartItem.product.productId,
                                       quantity: cartItem.quantity + 1,
                                     ),
@@ -146,7 +155,7 @@ class _CartScreenState extends State<CartScreen> {
                     height: 60,
                     width: double.infinity,
                     child: ElevatedButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutScreen(cartItems:state.cartItems,totalPrice: totalPrice,),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutScreen(cartItems:state.cartItems,totalPrice: totalPrice,currentUser: widget.currentUser),));
                     }, child: Text("Checkout",)),
                   ),
                 )

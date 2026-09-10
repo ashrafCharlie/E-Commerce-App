@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                      MaterialPageRoute(
-                      builder: (context) => ProductDetailsScreen(product: product),));
+                      builder: (context) => ProductDetailsScreen(product: product,currentUser: widget.currentUser,),));
                 },
                 child: Card(
                   child: Padding(

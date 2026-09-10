@@ -8,6 +8,7 @@ import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
 import 'package:ecommerce_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:ecommerce_app/features/cart/data/datasource/cart_remote_datasource_impl.dart';
 import 'package:ecommerce_app/features/cart/data/repository/cart_repositories_impl.dart';
 import 'package:ecommerce_app/features/cart/domain/repositories/cart_repository.dart';
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_bloc.dart';
@@ -42,13 +43,13 @@ class EcommerceApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthRepo>(create: (context) => AuthRepoImpl(remote: AuthRemoteDatasourceImpl()), ),
         RepositoryProvider<ProductRepo>(create: (context) => ProductRepoImpl(remote: ProductRemoteDatasourceImpl(dio: dio)),),
-        RepositoryProvider<CartRepository>(create: (context) => CartRepositoriesImpl(), ),
+        RepositoryProvider<CartRepository>(create: (context) => CartRepositoriesImpl( remoteDatasource: CartRemoteDatasourceImpl(firestore: fireStore)), ),
         RepositoryProvider<OrderRepository>(create:(context) => OrderRepositoryImpl(remoteDatasource: OrderRemoteDatasourceImpl(firestore: fireStore )), )
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthBloc(repo: context.read<AuthRepo>())..add(AuthCheckEvent()),),
-          BlocProvider(create: (context) => CartBloc(repo:context.read<CartRepository>() ),),
+          BlocProvider(create: (context) => CartBloc(cartRepository:context.read<CartRepository>() ),),
           BlocProvider(create: (context) => OrderBloc(orderRepository: context.read<OrderRepository>())),
         ],
         child: MaterialApp(

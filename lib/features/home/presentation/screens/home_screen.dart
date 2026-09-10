@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedPage = 0;
   @override
   Widget build(BuildContext context) {
-     List<Widget> pages = [HomePage(currentUser: widget.currentUser),FavoritePage(),CartScreen(),ProfilePage()];
+     List<Widget> pages = [HomePage(currentUser: widget.currentUser),FavoritePage(),CartScreen(currentUser: widget.currentUser,),ProfilePage()];
 
     return MultiBlocProvider(
       providers: [

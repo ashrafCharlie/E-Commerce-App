@@ -7,24 +7,58 @@ sealed class CartEvent extends Equatable {
 }
 
 class AddItemToCartEvent extends CartEvent{
+  final String userId;
   final CartItemEntity cartItem;
-  AddItemToCartEvent({required this.cartItem});
+  AddItemToCartEvent({required this.cartItem, required this.userId});
    @override
   // TODO: implement props
-  List<Object?> get props => [cartItem];
+  List<Object?> get props => [cartItem,userId];
 }
 
-class GetCartItemsEvent extends CartEvent{}
+class GetCartItemsEvent extends CartEvent{
+  final String userId;
+  GetCartItemsEvent({
+    required this.userId
+});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [userId];
+}
 
-class UpdateQuantityEvent extends CartEvent{
+class UpdateCartEvent extends CartEvent{
+  final String userId;
   final int productId;
   final int quantity;
-  
-  UpdateQuantityEvent({
+
+  UpdateCartEvent({
+    required this.userId,
     required this.productId,
     required this.quantity,
   });
 
    @override
-  List<Object?> get props => [productId,quantity];
+  List<Object?> get props => [productId,quantity,userId];
+}
+
+class DeleteCarItemEvent extends CartEvent{
+  final String userId;
+  final int productId;
+  DeleteCarItemEvent({
+    required this.userId,
+    required this.productId,
+});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [userId,productId];
+}
+
+
+class ClearCartEvent extends CartEvent{
+  final String userId;
+  ClearCartEvent({
+    required this.userId,
+});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [userId];
 }

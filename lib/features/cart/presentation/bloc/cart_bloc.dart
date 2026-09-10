@@ -4,25 +4,55 @@ import 'package:ecommerce_app/features/cart/presentation/bloc/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartBloc extends Bloc<CartEvent,CartState>{
-    final CartRepository repo;
-    CartBloc({required this.repo}):super(CartInitState()){
-        on<AddItemToCartEvent>((event, emit) {
+    final CartRepository cartRepository;
+    CartBloc({required this.cartRepository}):super(CartInitState()){
+        on<AddItemToCartEvent>((event, emit) async {
           emit(CartLoadingState());
-         final cartItems =  repo.addToCart(event.cartItem);
-         emit(CartLoadedState(cartItems: cartItems));
+        try{
+        await  cartRepository.addItemToCart(userId: event.userId, item: event.cartItem);
+        emit(CartAddSuccessfulState());
+        }catch(e){
+          emit(CartErrorState(message: e.toString()));
+        }
         },);
 
-        on<GetCartItemsEvent>((event, emit) {
+        on<GetCartItemsEvent>((event, emit) async {
           emit(CartLoadingState());
-          final cartItems = repo.getCartItems();
-          emit(CartLoadedState(cartItems: cartItems));
+        await  emit.forEach(cartRepository.getCartItems(userId: event.userId),
+              onData: (item) {
+                return CartLoadedState(cartItems: item);
+              },
+            onError: (error, stackTrace) => CartErrorState(message: error.toString()),
+          );
 
         },);
 
-        on<UpdateQuantityEvent>((event, emit) {
+        on<UpdateCartEvent>((event, emit)  async {
           emit(CartLoadingState());
-        final cartItems =   repo.updateCartItemQuantity(productId: event.productId, quantity: event.quantity);
-        emit(CartLoadedState(cartItems: cartItems));
+          try{
+            await cartRepository.updateCartItem(userId: event.userId, productId: event.productId, quantity: event.quantity);
+          }catch(e){
+            emit(CartErrorState(message: e.toString()));
+          }
+
+        },);
+
+        on<ClearCartEvent>((event, emit) async {
+          emit(CartLoadingState());
+          try{
+          await  cartRepository.clearCart(userId: event.userId);
+          }catch(e){
+            emit(CartErrorState(message: e.toString()));
+          }
+        },);
+
+        on<DeleteCarItemEvent>((event, emit) async {
+          emit(CartLoadingState());
+          try{
+          await  cartRepository.deleteCartItem(userId: event.userId, productId: event.productId);
+          }catch(e){
+            emit(CartErrorState(message: e.toString()));
+          }
         },);
     }
 }
