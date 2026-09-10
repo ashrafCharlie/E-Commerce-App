@@ -21,6 +21,10 @@ import 'package:ecommerce_app/features/product/data/datasource/remote/product_re
 import 'package:ecommerce_app/features/product/data/repositories/product_repo_impl.dart';
 import 'package:ecommerce_app/features/product/domain/repositories/product_repo.dart';
 import 'package:ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
+import 'package:ecommerce_app/features/wishlist/data/datasource/wishlist_remote_datasource_impl.dart';
+import 'package:ecommerce_app/features/wishlist/data/repositories/wishlist_repository_impl.dart';
+import 'package:ecommerce_app/features/wishlist/domain/repositories/wishlist_repository.dart';
+import 'package:ecommerce_app/features/wishlist/presentation/bloc/wishlist_bloc.dart';
 import 'package:ecommerce_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -44,13 +48,15 @@ class EcommerceApp extends StatelessWidget {
         RepositoryProvider<AuthRepo>(create: (context) => AuthRepoImpl(remote: AuthRemoteDatasourceImpl()), ),
         RepositoryProvider<ProductRepo>(create: (context) => ProductRepoImpl(remote: ProductRemoteDatasourceImpl(dio: dio)),),
         RepositoryProvider<CartRepository>(create: (context) => CartRepositoriesImpl( remoteDatasource: CartRemoteDatasourceImpl(firestore: fireStore)), ),
-        RepositoryProvider<OrderRepository>(create:(context) => OrderRepositoryImpl(remoteDatasource: OrderRemoteDatasourceImpl(firestore: fireStore )), )
+        RepositoryProvider<OrderRepository>(create:(context) => OrderRepositoryImpl(remoteDatasource: OrderRemoteDatasourceImpl(firestore: fireStore )), ),
+        RepositoryProvider<WishlistRepository>(create:(context) => WishlistRepositoryImpl(wishlistRemoteDatasource: WishlistRemoteDatasourceImpl(firestore: fireStore)),),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthBloc(repo: context.read<AuthRepo>())..add(AuthCheckEvent()),),
           BlocProvider(create: (context) => CartBloc(cartRepository:context.read<CartRepository>() ),),
           BlocProvider(create: (context) => OrderBloc(orderRepository: context.read<OrderRepository>())),
+          BlocProvider(create:(context) => WishlistBloc(wishlistRepository: context.read<WishlistRepository>()), )
         ],
         child: MaterialApp(
             scrollBehavior: const MaterialScrollBehavior().copyWith(

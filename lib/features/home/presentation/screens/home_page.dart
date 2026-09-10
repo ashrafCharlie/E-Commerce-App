@@ -1,4 +1,8 @@
 import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
+import 'package:ecommerce_app/features/cart/domain/entities/cart_item_entity.dart';
+import 'package:ecommerce_app/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:ecommerce_app/features/cart/presentation/bloc/cart_event.dart';
+import 'package:ecommerce_app/features/cart/presentation/screen/cart_screen.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_state.dart';
 import 'package:ecommerce_app/features/product/presentation/screen/product_details_screen.dart';
@@ -54,7 +58,9 @@ class _HomePageState extends State<HomePage> {
           ),
 
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(currentUser: widget.currentUser),));
+            },
             icon: const Icon(Icons.shopping_cart_outlined),
             color: colorScheme.onSurface,
           ),
@@ -79,7 +85,7 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 hintText: "Search products...",
                 prefixIcon: const Icon(Icons.search),
-               
+
               ),
             ),
 
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 16,),
 
                 ElevatedButton(
-                  onPressed: (){}, 
+                  onPressed: (){},
                   child: const Text("Shop Now")),
 
               ],),
@@ -142,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
                   itemBuilder:(context, index) {
-                    final catagory = categories[index];
+                    final category = categories[index];
 
                     return Container(
                       width: 90,
@@ -152,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                           CircleAvatar(
                             radius: 30,
                             backgroundColor: colorScheme.primaryContainer,
-                            child: Icon(catagory['icon'],
+                            child: Icon(category['icon'],
                             color: colorScheme.onPrimaryContainer,
                             ),
                           ),
@@ -160,11 +166,11 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 8,),
 
                           Text(
-                            catagory['name'],
+                            category['name'],
                             style: textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
-                          
+
                         ],
                       ),
                     );
@@ -185,7 +191,7 @@ class _HomePageState extends State<HomePage> {
             if(state is ProductErrorState){
               return Center(child: Text(state.errorMessage),);
             }
-            if(state is ProductLoadedState){ 
+            if(state is ProductLoadedState){
               final productList = state.productList;
               if(productList.isEmpty){
                 return Center(child: Text("No product found"),);
@@ -202,7 +208,7 @@ class _HomePageState extends State<HomePage> {
             ),
             itemBuilder: (context, index) {
               final product = productList[index];
-          
+
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -221,16 +227,16 @@ class _HomePageState extends State<HomePage> {
                             child: Image.network(product.productImage)
                           ),
                         ),
-                          
+
                         Text(
                           product.productTitle,
                           style: textTheme.titleMedium,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                          
+
                         const SizedBox(height: 6),
-                          
+
                         Text(
                           "\$${product.productPrice}",
                           style: textTheme.bodyLarge?.copyWith(
@@ -238,13 +244,16 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                          
+
                         const SizedBox(height: 8),
-                          
+
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<CartBloc>().add(AddItemToCartEvent(cartItem: CartItemEntity(product: product, quantity: 1), userId: widget.currentUser!.uid));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added to Cart")));
+                            },
                             child: const Text("Add to Cart"),
                           ),
                         ),
@@ -256,12 +265,12 @@ class _HomePageState extends State<HomePage> {
             },
           );
             }
-          return Center(child: Text("Some error occured"),);
+          return Center(child: Text("Some error Occurred"),);
           },
         ),
-                  ],  
+                  ],
                 ),
-                
+
               ),
             );
           }
