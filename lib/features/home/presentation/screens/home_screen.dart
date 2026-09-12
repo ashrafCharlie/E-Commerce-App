@@ -5,7 +5,7 @@ import 'package:ecommerce_app/features/home/presentation/screens/home_page.dart'
 import 'package:ecommerce_app/features/product/domain/repositories/product_repo.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_event.dart';
-import 'package:ecommerce_app/features/profile/presentation/screen/profile_page.dart';
+import 'package:ecommerce_app/features/profile/presentation/screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedPage = 0;
   @override
   Widget build(BuildContext context) {
-     List<Widget> pages = [HomePage(currentUser: widget.currentUser),WishlistScreen(currentUser: widget.currentUser),CartScreen(currentUser: widget.currentUser,),ProfilePage()];
+     List<Widget> pages = [HomePage(currentUser: widget.currentUser),WishlistScreen(currentUser: widget.currentUser),CartScreen(currentUser: widget.currentUser,),ProfileScreen(currentUser: widget.currentUser,)];
 
     return MultiBlocProvider(
       providers: [

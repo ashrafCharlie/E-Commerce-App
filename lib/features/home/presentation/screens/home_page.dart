@@ -3,11 +3,16 @@ import 'package:ecommerce_app/features/cart/domain/entities/cart_item_entity.dar
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_event.dart';
 import 'package:ecommerce_app/features/cart/presentation/screen/cart_screen.dart';
+import 'package:ecommerce_app/features/category/presentation/bloc/category_bloc.dart';
+import 'package:ecommerce_app/features/category/presentation/bloc/category_event.dart';
+import 'package:ecommerce_app/features/category/presentation/bloc/category_state.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_bloc.dart';
 import 'package:ecommerce_app/features/product/presentation/bloc/product_state.dart';
 import 'package:ecommerce_app/features/product/presentation/screen/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../product/presentation/bloc/product_event.dart';
 
 class HomePage extends StatefulWidget {
   final UserEntity? currentUser;
@@ -18,32 +23,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-   final List<Map<String, dynamic>> categories = [
-  {
-    'name': 'Fashion',
-    'icon': Icons.checkroom_outlined,
-  },
-  {
-    'name': 'Electronics',
-    'icon': Icons.phone_android_outlined,
-  },
-  {
-    'name': 'Shoes',
-    'icon': Icons.directions_run_outlined,
-  },
-  {
-    'name': 'Computers',
-    'icon': Icons.computer_outlined,
-  },
-];
-
+  @override
+  void initState() {
+    super.initState();
+    context.read<CategoryBloc>().add(GetCategoriesEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-   
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -52,7 +42,9 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+
+            },
             icon: const Icon(Icons.notifications_outlined),
             color: colorScheme.onSurface,
           ),
@@ -82,45 +74,18 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
 
             TextField(
+              onChanged: (value){
+
+                  context.read<ProductBloc>().add(
+                    SearchProductEvent(searchWord: value),
+                  );
+
+              },
               decoration: InputDecoration(
                 hintText: "Search products...",
                 prefixIcon: const Icon(Icons.search),
 
               ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: colorScheme.primary,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(children: [
-                Text("Special offer",
-                style: textTheme.titleLarge?.copyWith(
-                  color: colorScheme.onPrimary,
-                ),
-                ),
-
-                const SizedBox(height: 8,),
-
-                Text(
-                  "Get up to 50% off",
-                  style: textTheme.headlineLarge?.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
-
-                const SizedBox(height: 16,),
-
-                ElevatedButton(
-                  onPressed: (){},
-                  child: const Text("Shop Now")),
-
-              ],),
             ),
 
             const SizedBox(height: 30),
@@ -132,11 +97,6 @@ class _HomePageState extends State<HomePage> {
                     "Categories",
                     style: textTheme.titleLarge,
                   ),
-
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text("See All"),
-                  ),
                 ],
               ),
 
@@ -144,38 +104,94 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(
                 height: 100,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder:(context, index) {
-                    final category = categories[index];
+                child: BlocBuilder<CategoryBloc,CategoryState>(
+                  builder: (context, state) {
+                    if(state is CategoryLoadingState){
+                      return Center(child: CircularProgressIndicator(),);
+                    }
+                    if(state is CategoryErrorState){
+                      return Center(child: Text(state.message),);
+                    }
+                    if(state is CategoryLoadedState){
+                      final categories = state.categories;
+                      if(categories.isEmpty){
+                        return Center(child: Text("No category found"),);
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length + 1,
+                        itemBuilder:(context, index) {
+                          if (index == 0) {
+                            return InkWell(
+                              onTap: () {
+                                context.read<ProductBloc>().add(
+                                  ProductFetchEvent(),
+                                );
+                              },
+                              child: Container(
+                                width: 90,
+                                margin: const EdgeInsets.only(right: 12),
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: colorScheme.primaryContainer,
+                                      child: Icon(
+                                        Icons.grid_view,
+                                        color: colorScheme.onPrimaryContainer,
+                                      ),
+                                    ),
 
-                    return Container(
-                      width: 90,
-                      margin: const EdgeInsets.only(right: 12),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: colorScheme.primaryContainer,
-                            child: Icon(category['icon'],
-                            color: colorScheme.onPrimaryContainer,
+                                    const SizedBox(height: 8),
+
+                                    Text(
+                                      "All",
+                                      style: textTheme.bodyMedium,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                          final category = categories[index - 1];
+                          return InkWell(
+                            onTap: () {
+                              context.read<ProductBloc>().add(GetProductsByCategoryEvent(slug: category.slug));
+                            } ,
+                            child: Container(
+                              width: 90,
+                              margin: const EdgeInsets.only(right: 12),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: colorScheme.primaryContainer,
+                                    child: Icon(Icons.category,
+                                      color: colorScheme.onPrimaryContainer,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 8,),
+
+                                  Text(
+                                    category.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.bodyMedium,
+                                    textAlign: TextAlign.center,
+                                  ),
+
+                                ],
+                              ),
                             ),
-                          ),
-
-                          const SizedBox(height: 8,),
-
-                          Text(
-                            category['name'],
-                            style: textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-
-                        ],
-                      ),
-                    );
+                          );
+                        },
+                      );
+                    }
+                    return Center(child: Text("Some Error Occurred"),);
                   },
-                   ),
+                ),
               ),
         const SizedBox(height: 30),
 
