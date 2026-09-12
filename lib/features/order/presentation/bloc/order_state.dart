@@ -32,3 +32,5 @@ class OrderLoadedState  extends OrderState{
   // TODO: implement props
   List<Object?> get props => [orders];
 }
+
+class OrderCancelSuccessfulState extends OrderState{}

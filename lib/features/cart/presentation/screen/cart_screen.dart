@@ -2,6 +2,8 @@ import 'package:ecommerce_app/features/auth/domain/entities/user_entity.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
 import 'package:ecommerce_app/features/checkout/presentation/screens/checkout_screen.dart';
+import 'package:ecommerce_app/features/product/presentation/bloc/product_bloc.dart';
+import 'package:ecommerce_app/features/product/presentation/screen/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/features/cart/presentation/bloc/cart_bloc.dart';
@@ -64,6 +66,18 @@ class _CartScreenState extends State<CartScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
+                            onLongPress: () {
+                              showDialog(context: context, builder: (context) => AlertDialog(
+                                title: Text("Remove item from cart"),
+                                actions: [
+                                  TextButton(onPressed: (){Navigator.pop(context);}, child: Text("Cancel")),
+                                  TextButton(onPressed: (){
+                                    context.read<CartBloc>().add(DeleteCarItemEvent(userId: widget.currentUser!.uid, productId: cartItem.product.productId));
+                                    Navigator.pop(context);
+                                  }, child: Text("Remove")),
+                                ],
+                              ),);
+                            },
                             contentPadding: EdgeInsets.zero,
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),

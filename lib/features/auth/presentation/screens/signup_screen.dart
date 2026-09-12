@@ -2,7 +2,6 @@ import 'package:ecommerce_app/core/validators/app_validator.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
-import 'package:ecommerce_app/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,9 +49,10 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-            
+                 Icon(Icons.shopping_bag_outlined,size: 80,),
+                 SizedBox(height: 10.0,),
                  Text(
-                  'Welcome Here',
+                  'Ash Shopping Platform',
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
             

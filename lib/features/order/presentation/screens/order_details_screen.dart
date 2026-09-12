@@ -1,5 +1,9 @@
 import 'package:ecommerce_app/features/order/domain/entities/order_entity.dart';
+import 'package:ecommerce_app/features/order/presentation/bloc/order_bloc.dart';
+import 'package:ecommerce_app/features/order/presentation/bloc/order_event.dart';
+import 'package:ecommerce_app/features/order/presentation/bloc/order_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 class OrderDetailsScreen extends StatelessWidget {
   final OrderEntity order;
   const OrderDetailsScreen({super.key, required this.order});

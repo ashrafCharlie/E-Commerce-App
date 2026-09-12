@@ -27,8 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
     emailController.dispose();
     passwordController.dispose();
     forgetPasswrdEmail.dispose();
-
-    
   }
   @override
   Widget build(BuildContext context) {
@@ -48,9 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-            
+                 Icon(Icons.shopping_bag_outlined,
+                   size: 80,
+                 ),
+                 SizedBox(height: 10.0,),
                  Text(
-                  'Welcome Back!',
+                  'Ash Shopping Platform',
                   style: Theme.of(context).textTheme.headlineLarge,
                   
                 ),

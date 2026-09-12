@@ -54,6 +54,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           vertical: 8,
                         ),
                         child: ListTile(
+                          onLongPress: (){
+                            showDialog(context: context, builder: (context) => AlertDialog(
+                              title: Text("Are You Sure?"),
+                              actions: [
+                                TextButton(onPressed: (){Navigator.pop(context);}, child: Text("No")),
+                                TextButton(onPressed: (){
+                                  Navigator.pop(context);
+                                  context.read<OrderBloc>().add(CancelOrderEvent(orderId: order.orderId,));
+                                }, child: Text("Cancel order")),
+                              ],
+                            ),);
+                          },
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) => OrderDetailsScreen(order: order),));

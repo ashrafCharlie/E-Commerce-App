@@ -4,5 +4,6 @@ import '../models/order_model.dart';
 
 abstract class OrderRemoteDatasource {
   Future<void> createOrder(OrderModel order);
-  Stream<List<OrderEntity>> getOrders(String userId);
+  Stream<List<OrderModel>> getOrders(String userId);
+  Future<void> cancelOrder({required String orderId});
 }

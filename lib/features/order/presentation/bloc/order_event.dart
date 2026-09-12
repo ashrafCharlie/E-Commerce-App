@@ -17,6 +17,7 @@ class CreateOrderEvent extends OrderEvent{
   List<Object?> get props => [order];
 }
 
+
 class GetOrdersEvent extends OrderEvent{
   final String userId;
   GetOrdersEvent({
@@ -25,4 +26,13 @@ class GetOrdersEvent extends OrderEvent{
   @override
   // TODO: implement props
   List<Object?> get props => [userId];
+}
+
+class CancelOrderEvent extends OrderEvent{
+
+  final String orderId;
+  CancelOrderEvent({required this.orderId});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [orderId];
 }

@@ -11,6 +11,7 @@ class OrderBloc extends Bloc<OrderEvent,OrderState>{
 }): super(OrderInitialState()){
     on<CreateOrderEvent>(_onCreateOrder);
     on<GetOrdersEvent>(_onGetOrders);
+    on<CancelOrderEvent>(_onCancelOrder);
   }
 
   Future<void> _onCreateOrder(
@@ -42,6 +43,18 @@ class OrderBloc extends Bloc<OrderEvent,OrderState>{
       },
         );
 
+  }
+
+  Future<void> _onCancelOrder(
+      CancelOrderEvent event,
+      Emitter<OrderState> emit,
+      ) async {
+    emit(OrderLoadingState());
+    try{
+      await orderRepository.cancelOrder( orderId: event.orderId);
+    }catch(e){
+      emit(OrderErrorState(message: e.toString()));
+    }
   }
 
 
