@@ -23,11 +23,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String selectedCategory = 'All';
   @override
   void initState() {
     super.initState();
     context.read<CategoryBloc>().add(GetCategoriesEvent());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +129,9 @@ class _HomePageState extends State<HomePage> {
                                 context.read<ProductBloc>().add(
                                   ProductFetchEvent(),
                                 );
+                                setState(() {
+                                  selectedCategory = "All";
+                                });
                               },
                               child: Container(
                                 width: 90,
@@ -135,18 +140,19 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     CircleAvatar(
                                       radius: 30,
-                                      backgroundColor: colorScheme.primaryContainer,
+                                      backgroundColor: selectedCategory=='All'? colorScheme.primaryContainer: Colors.black12,
                                       child: Icon(
                                         Icons.grid_view,
                                         color: colorScheme.onPrimaryContainer,
                                       ),
                                     ),
-
                                     const SizedBox(height: 8),
 
                                     Text(
                                       "All",
-                                      style: textTheme.bodyMedium,
+                                      style: textTheme.bodyMedium!.copyWith(
+                                        color: selectedCategory == 'All' ? Colors.black: Colors.grey
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -158,6 +164,9 @@ class _HomePageState extends State<HomePage> {
                           return InkWell(
                             onTap: () {
                               context.read<ProductBloc>().add(GetProductsByCategoryEvent(slug: category.slug));
+                              setState(() {
+                                selectedCategory = category.name;
+                              });
                             } ,
                             child: Container(
                               width: 90,
@@ -166,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
-                                    backgroundColor: colorScheme.primaryContainer,
+                                    backgroundColor: selectedCategory==category.name? colorScheme.primaryContainer: Colors.black12,
                                     child: Icon(Icons.category,
                                       color: colorScheme.onPrimaryContainer,
                                     ),
@@ -178,8 +187,11 @@ class _HomePageState extends State<HomePage> {
                                     category.name,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.bodyMedium,
+                                    style: textTheme.bodyMedium!.copyWith(
+                                      color: selectedCategory == category.name? Colors.black  :  Colors.grey
+                                    ),
                                     textAlign: TextAlign.center,
+
                                   ),
 
                                 ],
