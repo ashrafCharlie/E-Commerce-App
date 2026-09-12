@@ -1,17 +1,61 @@
-# ecommerce_app
+# E-Commerce App
 
-A new Flutter project.
+A modern Flutter e-commerce application built with **Flutter, Firebase, REST API, and BLoC**.
 
-## Getting Started
+This project was built to practice and demonstrate how a real-world Flutter application can be structured using **Clean Architecture, feature-first folder structure, state management, API integration, Firebase, and asynchronous data handling**.
 
-This project is a starting point for a Flutter application.
+## 📸 Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+<p align="center">
+  <img src="screenshots/login_sreen.png" width="30%">
+  <img src="screenshots/signup_screen.png" width="30%">
+  <img src="screenshots/home_screen.png" width="30%">
+</p>
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+<p align="center">
+  <img src="screenshots/cart_screen.png" width="30%">
+  <img src="screenshots/wishlist_screen.png" width="30%">
+  <img src="screenshots/profile_screen.png" width="30%">
+</p>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p align="center">
+  <img src="screenshots/checkout_screen.png" width="30%">
+  <img src="screenshots/order_screen.png" width="30%">
+  <img src="screenshots/order_details_screen.png" width="30%">
+</p>
+<p align="center">
+  <img src="screenshots/product_details.png" width="30%">
+  <img src="screenshots/product_search.png" width="30%">
+</p>
+
+##  Features
+
+-  User Authentication (Login & Sign Up)
+-  Product Browsing
+-  Product Search with Debounce
+-  Category Filtering
+-  Product Details
+-  Cart Management
+-  Wishlist
+-  Checkout
+-  Order Management
+-  User Profile
+-  Firebase Authentication & Firestore
+-  REST API Integration
+
+## Technologies & Packages
+
+- **Flutter & Dart**
+- **BLoC / Cubit**
+- **Clean Architecture**
+- **Feature-First Architecture**
+- **Dio** — API integration
+- **Firebase Authentication**
+- **Cloud Firestore**
+- **Equatable**
+- **Stream Transform** — Debounce
+- **Git & GitHub**
+
+## API
+
+Products are fetched from the **DummyJSON REST API**.
