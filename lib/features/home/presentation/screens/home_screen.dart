@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
           GButton(
             icon: Icons.favorite_border,
-            text: "Favorite",
+            text: "Wishlist",
               ),
           GButton(
             icon: Icons.shopping_cart_outlined,

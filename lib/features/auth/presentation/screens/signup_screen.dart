@@ -2,6 +2,7 @@ import 'package:ecommerce_app/core/validators/app_validator.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_event.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc_state.dart';
+import 'package:ecommerce_app/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,6 +39,9 @@ class _SignupScreenState extends State<SignupScreen> {
     listener: (context, state) {
       if(state is AuthErrorState){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMsg)));
+      }
+      if(state is AuthenticateState){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUser: state.user),), (route) => false,);
       }
     },
     child: SafeArea(

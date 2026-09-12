@@ -82,7 +82,6 @@ class EcommerceApp extends StatelessWidget {
     if (state is AuthcheckingState) {
       return const SplashScreen();
     }
-
     if (state is AuthenticateState) {
     
       return  HomeScreen(currentUser: state.user,);
